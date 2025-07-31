@@ -1,0 +1,29 @@
+{
+  "name": "Luna Park Andora",
+  "short_name": "Luna Park Andora",
+  "description": "Coupon digitali per le attrazioni del Luna Park di Andora - Estate 2025",
+  "start_url": "./ https://lunaparkandora.github.io/app2025/",
+  "display": "standalone",
+  "background_color": "#FFD700",
+  "theme_color": "#FF69B4",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "lang": "it",
+  "display_override": [
+    "standalone",
+    "browser",
+    "fullscreen",
+    "minimal-ui",
+    "window-controls-overlay"
+  ]
+}
