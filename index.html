@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna Park Andora - Coupon Estate 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Balsamiq+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* Nuovi colori più vivaci: */
+        /* Giallo Sole: #FFD700 */
+        /* Rosa Caramella: #FF69B4 */
+        /* Azzurro Cielo: #87CEEB */
+        /* Verde Mela: #7CFC00 */
+        /* Arancione Brillante: #FF8C00 */
+        /* Viola Allegro: #9370DB */
+        /* Bianco Puro: #FFFFFF */
+        /* Nero Intenso: #333333 */
+
+        body {
+            font-family: 'Balsamiq Sans', cursive, Arial, sans-serif;
+            background: linear-gradient(to bottom right, #FFD700, #FF69B4);
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+            font-size: 18px;
+            color: #333333;
+        }
+        h1 {
+            font-family: 'Balsamiq Sans', cursive, Arial, sans-serif;
+            text-align: center;
+            color: #333333;
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+        }
+        #search-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #coupon-search {
+            padding: 18px 30px;
+            width: 90%;
+            max-width: 650px;
+            border: 4px solid #FF8C00;
+            border-radius: 60px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333333;
+            background-color: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 0 8px #FFD700;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        #coupon-search:focus {
+            border-color: #9370DB;
+            box-shadow: 0 0 0 8px #9370DB, 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        #coupons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .coupon {
+            border: 3px dashed #87CEEB;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+            transform: rotateZ(var(--rotation, 0deg));
+            animation: bounceIn 0.8s ease-out forwards;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+            50% { transform: scale(1.05) translateY(-5px); opacity: 1; }
+            100% { transform: scale(1) translateY(0); }
+        }
+        .coupon:nth-child(even) { --rotation: 1deg; }
+        .coupon:nth-child(odd) { --rotation: -1deg; }
+        .coupon:hover:not(.used) {
+            transform: scale(1.05) rotateZ(var(--rotation, 0deg));
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        }
+        .coupon.used::before {
+            content: '✖';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 8em;
+            color: rgba(255, 0, 0, 0.7);
+            z-index: 10;
+            pointer-events: none;
+            animation: appearAndRotate 0.5s ease-out forwards;
+        }
+        @keyframes appearAndRotate {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+            70% { transform: translate(-50%, -50%) scale(1.1) rotate(30deg); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+            100% { transform: translateX(0); }
+        }
+        .coupon.shake {
+            animation: shake 0.3s ease-in-out;
+        }
+        .coupon-content {
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .coupon-content h3 {
+            font-family: 'Balsamiq Sans', cursive;
+            margin: 5px 0 15px;
+            font-size: 28px;
+            color: #333333;
+            text-shadow: 1px 1px #87CEEB;
+        }
+        .offer {
+            margin: 0 0 15px;
+            font-style: italic;
+            color: #FF69B4;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        button {
+            padding: 16px 35px;
+            font-size: 20px;
+            background: #7CFC00;
+            color: #333333;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        button:hover:not(:disabled) {
+            background: #6BBE00;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.35);
+        }
+        button:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: inset 0 3px 5px rgba(0,0,0,0.4);
+        }
+        button:disabled {
+            background: #cccccc;
+            color: #999999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .status {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.6em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 11;
+            position: relative;
+            color: #FF8C00;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .status.available {
+            color: #7CFC00;
+            text-shadow: none;
+        }
+        .status.blocked {
+            color: #FF8C00;
+        }
+        .disclaimer {
+            margin-top: 40px;
+            padding: 25px;
+            font-size: 1.2em;
+            color: #333333;
+            background: #FFFFFF;
+            border-left: 5px solid #FF8C00;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            font-size: 1.1em;
+            color: #333333;
+            border-top: 1px solid #FFD700;
+        }
+        @media (max-width: 768px) {
+            body { font-size: 15px; padding: 15px; }
+            h1 { font-size: 2.2em; margin-bottom: 20px; }
+            #coupon-search { padding: 15px 20px; font-size: 1.2em; border: 3px solid #FF8C00; box-shadow: 0 6px 15px rgba(0,0,0,0.25), 0 0 0 6px #FFD700; }
+            #coupon-search:focus { box-shadow: 0 0 0 6px #9370DB, 0 6px 18px rgba(0,0,0,0.3); }
+            #coupons { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .coupon { border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); margin-bottom: 15px; }
+            .coupon-content { padding: 10px; }
+            .coupon-content h3 { font-size: 18px; margin-bottom: 10px; text-shadow: 1px 1px #87CEEB; }
+            .offer { font-size: 0.9em; margin-bottom: 10px; }
+            button { padding: 10px 15px; font-size: 15px; }
+            .status { font-size: 1em; margin-top: 10px; }
+            .disclaimer { font-size: 0.9em; padding: 15px; }
+            footer { font-size: 0.9em; }
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8em; }
+            #coupon-search { padding: 12px 18px; font-size: 1.1em; border: 3px solid #FF8C00; box-shadow: 0 5px 12px rgba(0,0,0,0.2), 0 0 0 5px #FFD700; }
+            #coupon-search:focus { box-shadow: 0 0 0 5px #9370DB, 0 5px 15px rgba(0,0,0,0.25); }
+            #coupons { grid-template-columns: 1fr; gap: 20px; }
+            .coupon-content h3 { font-size: 22px; text-shadow: 1px 1px #87CEEB; }
+            .offer { font-size: 1.1em; }
+            button { font-size: 17px; padding: 12px 25px; }
+            .status { font-size: 1.2em; }
+            .disclaimer { font-size: 0.85em; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎡 Luna Park Andora - Coupon Estate 2025 🎟️</h1>
+
+    <div id="search-container">
+        <input type="text" id="coupon-search" placeholder="Cerca coupon per numero o nome...">
+    </div>
+
+    <div id="coupons"></div>
+
+    <div class="disclaimer">
+        ⚠️ <strong>Regolamento:</strong> Ogni coupon è personale, non cedibile e utilizzabile una sola volta ogni 20 ore per persona.
+        In caso di abuso, il Luna Park si riserva il diritto di invalidare i coupon non conformi.
+    </div>
+
+    <footer>
+        Pagina realizzata da Bellotti Alan
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const couponsContainer = document.getElementById('coupons');
+            const searchInput = document.getElementById('coupon-search');
+            const HOURS = 20; // Variabile di riferimento per le ore di blocco
+            const MS = 60 * 60 * 1000; // Millisecondi in un'ora
+
+            const couponData = [
+                { number: 51, name: 'AUTOPISTA', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 52, name: 'MINI CATENE', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 53, name: 'GIOSTRA CATENE', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 54, name: 'MINI AUTOPISTA', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 55, name: 'GIOSTRA DI HULK', offer: 'SCONTO 0,50€ SU UN GIRO' },
+                { number: 56, name: 'CIRCUS', offer: 'SCONTO 0,50€ SU UN INGRESSO' },
+                { number: 57, name: 'TABOGA', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 58, name: 'BRUCO', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 59, name: 'TAPPETI ELASTICI', offer: '2 MINUTI EXTRA SU ABBONAMENTO' },
+                { number: 60, name: 'GIOSTRA TAGADA', offer: 'SCONTO 1€ SU UN GIRO' },
+                { number: 61, name: 'SIMULATORE', offer: 'SCONTO 0,50€ SU UN GIRO' },
+                { number: 64, name: 'TIRO BARATTOLI', offer: '2 PALLINE IN OMAGGIO SU 1 GIOCATA' },
+                { number: 65, name: 'DERBY DAY', offer: '1 GETTONE OMAGGIO SU 1 ABBONAMENTO' },
+                { number: 66, name: 'CANOE', offer: 'PRENDI 2 PAGHI 1' },
+                { number: 68, name: 'WATER BALL', offer: 'SCONTO 1€ SU UN GIRO' },
+                { number: 70, name: 'SPACCA TUTTO', offer: 'SCONTO 1€ SU UN ABBONAMENTO' },
+                { number: 71, name: 'ROTONDA CIGNI', offer: '5 PESCATE OMAGGIO SU UN ABBONAMENTO' },
+                { number: 72, name: 'ROTONDA PESCA', offer: '5 PESCATE OMAGGIO SU UN ABBONAMENTO' },
+                { number: 74, name: 'TARGET', offer: '10 COLPI IN OMAGGIO SU UN ABBONAMENTO DA 10€' },
+                { number: 75, name: 'NIGHT AND DAY', offer: '20 GETTONI OMAGGIO SU UN ABBONAMENTO' },
+                { number: 76, name: 'PLAYGROUND', offer: 'SCONTO 1€ SU UN ABBONAMENTO' },
+                { number: 77, name: 'TOP SPIN', offer: 'SCONTO 1€ SU UN GIRO' },
+                { number: 78, name: 'GIOSTRA NOVITÀ', offer: 'SCONTO 1€ SU UN GIRO' },
+                { number: 81, name: 'TIRO FUCILI E PISTOLE', offer: '10 COLPI IN OMAGGIO SU UN ABBONAMENTO DA 10€' },
+                { number: 98, name: 'BANCO DOLCIUMI', offer: 'SCONTO 0,50€ SUL TUO ACQUISTO' },
+                { number: 99, name: 'ROTONDA OPLÀ', offer: '5 ANELLI OMAGGIO SU UN ABBONAMENTO' },
+                { number: 100, name: 'CALCIO DI RIGORE', offer: '1 TIRO OMAGGIO SU UN ABBONAMENTO' },
+                { number: 101, name: 'CINEMA VISION', offer: 'SCONTO 0,50€ SU UN INGRESSO' }
+            ];
+
+            function createCouponElement(data, index) {
+                const couponId = `coupon${data.number}`;
+                const couponKey = `${couponId}_lastUsed`;
+
+                const div = document.createElement('div');
+                div.className = 'coupon';
+                div.setAttribute('data-coupon-number', data.number);
+                div.setAttribute('data-coupon-name', data.name.toLowerCase());
+                div.style.animationDelay = `${index * 0.05}s`;
+
+                const content = document.createElement('div');
+                content.className = 'coupon-content';
+
+                const title = document.createElement('h3');
+                title.textContent = `${data.number} - ${data.name}`;
+                content.appendChild(title);
+
+                const offer = document.createElement('p');
+                offer.className = 'offer';
+                offer.textContent = data.offer;
+                content.appendChild(offer);
+
+                const button = document.createElement('button');
+                button.textContent = 'Usa ora';
+                button.id = `btn_${couponId}`;
+                content.appendChild(button);
+
+                const status = document.createElement('div');
+                status.className = 'status';
+                status.id = `status_${couponId}`;
+                content.appendChild(status);
+
+                div.appendChild(content);
+
+                let countdownInterval;
+
+                function updateStatus() {
+                    const lastUsed = localStorage.getItem(couponKey);
+                    const now = Date.now();
+                    if (lastUsed && now - lastUsed < HOURS * MS) {
+                        button.disabled = true;
+                        div.classList.add('used');
+                        status.classList.remove('available');
+                        status.classList.add('blocked');
+
+                        if (!countdownInterval) {
+                            countdownInterval = setInterval(() => {
+                                const updatedNow = Date.now();
+                                const remainingTime = (HOURS * MS) - (updatedNow - lastUsed);
+                                if (remainingTime <= 0) {
+                                    clearInterval(countdownInterval);
+                                    countdownInterval = null;
+                                    updateStatus();
+                                } else {
+                                    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                                    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                                    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                                    status.textContent = `🔒 Bloccato! ${hours}h ${minutes}m ${seconds}s`;
+                                }
+                            }, 1000);
+                        }
+                    } else {
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                        button.disabled = false;
+                        status.textContent = '✅ Disponibile';
+                        status.classList.remove('blocked');
+                        status.classList.add('available');
+                        div.classList.remove('used');
+                    }
+                }
+
+                button.addEventListener('click', () => {
+                    const confirmUse = confirm(`Sei sicuro di voler usare il coupon ${data.number} - ${data.name}?\nOfferta: ${data.offer}\n\nQuesto coupon sarà bloccato per ${HOURS} ore dopo l'uso.`);
+                    if (confirmUse) {
+                        localStorage.setItem(couponKey, Date.now());
+                        updateStatus();
+                        div.classList.add('shake');
+                        div.addEventListener('animationend', () => {
+                            div.classList.remove('shake');
+                        }, { once: true });
+                    }
+                });
+
+                updateStatus();
+                return div;
+            }
+
+            couponData.forEach((coupon, index) => {
+                couponsContainer.appendChild(createCouponElement(coupon, index));
+            });
+
+            searchInput.addEventListener('keyup', () => {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const allCoupons = couponsContainer.querySelectorAll('.coupon');
+
+                allCoupons.forEach(couponDiv => {
+                    const couponNumber = couponDiv.getAttribute('data-coupon-number');
+                    const couponName = couponDiv.getAttribute('data-coupon-name');
+
+                    if (searchTerm === '' || couponNumber.includes(searchTerm) || couponName.includes(searchTerm)) {
+                        couponDiv.style.display = 'flex';
+                    } else {
+                        couponDiv.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Codice per registrare il Service Worker (lo rende una PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registrato con successo:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Registrazione Service Worker fallita:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
